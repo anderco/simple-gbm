@@ -54,7 +54,7 @@ allocate_bo(struct simple_gbm *simple_gbm)
 {
 	struct gbm_bo *bo;
 	struct wl_buffer *buffer;
-	int fd, ret;
+	int fd;
 
 	assert(simple_gbm->gbm);
 
@@ -63,8 +63,8 @@ allocate_bo(struct simple_gbm *simple_gbm)
 			   GBM_FORMAT_XRGB8888, GBM_BO_USE_MAP);
 	assert(bo);
 
-	ret = gbm_bo_export_dma_buf(bo, &fd);
-	assert(ret == 0);
+	fd = gbm_bo_get_fd(bo);
+	assert(fd > 0);
 
 	buffer = wl_drm_create_prime_buffer(simple_gbm->drm, fd,
 					    simple_gbm->width,
